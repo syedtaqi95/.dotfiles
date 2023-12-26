@@ -251,6 +251,7 @@ require('lazy').setup({
           formatting.mdformat,
           formatting.shfmt.with({ extra_args = { "-i", "4" } }),
           formatting.prettier,
+          formatting.black,
         },
         on_attach = on_attach,
       }
