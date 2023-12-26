@@ -236,6 +236,27 @@ require('lazy').setup({
   -- Auto close brackets and other pairs
   { 'm4xshen/autoclose.nvim', opts = {} },
 
+  {
+    'jose-elias-alvarez/null-ls.nvim',
+    opts = function()
+      local null_ls = require("null-ls")
+      local formatting = null_ls.builtins.formatting
+
+      local on_attach = function(bufnr)
+        vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat current buffer' })
+      end
+
+      return {
+        sources = {
+          formatting.mdformat,
+          formatting.shfmt.with({ extra_args = { "-i", "4" } }),
+          formatting.prettier,
+        },
+        on_attach = on_attach,
+      }
+    end,
+  },
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.

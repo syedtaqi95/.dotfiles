@@ -59,4 +59,3 @@ echo "Linking .bashrc..."
 SOURCE="$SCRIPT_DIR/.bashrc"
 TARGET="$HOME/.bashrc"
 create_symlink "$SOURCE" "$TARGET"
-
