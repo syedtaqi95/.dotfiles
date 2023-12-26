@@ -326,8 +326,8 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Center the cursor when navigating pages
-vim.keymap.set('n', '<C-d>', 'Navigate down half a page')
-vim.keymap.set('n', '<C-u>', 'Navigate up half a page')
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Navigate down half a page'})
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Navigate up half a page'})
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
