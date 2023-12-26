@@ -291,6 +291,9 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Distance of cursor from screen top/bottom
+vim.o.scrolloff = 4
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
