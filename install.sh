@@ -39,3 +39,14 @@ SOURCE="$SCRIPT_DIR/.tmux.conf"
 TARGET="$HOME/.tmux.conf"
 create_symlink "$SOURCE" "$TARGET"
 
+# Git config
+echo
+echo "Applying git config..."
+SOURCE="$SCRIPT_DIR/.gitconfig"
+TARGET="$HOME/.gitconfig"
+create_symlink "$SOURCE" "$TARGET"
+
+
+
+
+
