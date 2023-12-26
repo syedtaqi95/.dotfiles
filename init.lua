@@ -233,6 +233,9 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
+  -- Auto close brackets and other pairs
+  { 'm4xshen/autoclose.nvim', opts = {} },
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -301,8 +304,8 @@ vim.o.scrolloff = 4
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Center the cursor when navigating pages
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Navigate down half a page'})
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Navigate up half a page'})
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Navigate down half a page' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Navigate up half a page' })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
