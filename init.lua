@@ -1,8 +1,5 @@
 --[[
-Neovim config based on kickstart.nvim with some mods:
-- Modified <C-d> and <C-u> remaps to centre cursor on screen.
-- Modified "onedark" theme.
-- Highlight incsearch
+Neovim config based on kickstart.nvim with my mods :)
 -]]
 
 -- Set <space> as the leader key
