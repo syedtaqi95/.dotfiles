@@ -224,7 +224,8 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
+  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins"
+  -- for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   -- require 'kickstart.plugins.autoformat',
@@ -263,12 +264,16 @@ require('lazy').setup({
     end
   },
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  -- NOTE: The import below can automatically add your own plugins,
+  -- configuration, etc from `lua/custom/plugins/*.lua`
+  --    You can use this folder to prevent any conflicts with this init.lua if
+  --    you're interested in keeping up-to-date with whatever is in the
+  --    kickstart repo.
+  --    Uncomment the following line and add your plugins to
+  --    `lua/custom/plugins/*.lua` to get going.
   --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
+  --    For additional information see:
+  --    https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
 
@@ -321,7 +326,7 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
--- Distance of cursor from screen top/bottom
+-- Min distance of cursor from screen top/bottom
 vim.o.scrolloff = 4
 
 -- [[ Basic Keymaps ]]
@@ -577,13 +582,15 @@ require('mason').setup()
 require('mason-lspconfig').setup()
 
 -- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--  Feel free to add/remove any LSPs that you want here. They will
+--  automatically be installed.
 --
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
+--  Add any additional override configuration in the following tables. They
+--  will be passed to the `settings` field of the server config. You must look
+--  up that documentation yourself.
 --
---  If you want to override the default filetypes that your language server will attach to you can
---  define the property 'filetypes' to the map in question.
+--  If you want to override the default filetypes that your language server
+--  will attach to you can define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
   -- gopls = {},
