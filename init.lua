@@ -236,15 +236,12 @@ require('lazy').setup({
   -- Auto close brackets and other pairs
   { 'm4xshen/autoclose.nvim', opts = {} },
 
+  -- Use null-ls for linters, formatters etc. that don't support LSP
   {
     'jose-elias-alvarez/null-ls.nvim',
     opts = function()
       local null_ls = require("null-ls")
       local formatting = null_ls.builtins.formatting
-
-      local on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat current buffer' })
-      end
 
       return {
         sources = {
@@ -253,7 +250,6 @@ require('lazy').setup({
           formatting.prettier,
           formatting.black,
         },
-        on_attach = on_attach,
       }
     end,
   },
@@ -338,6 +334,9 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+-- Format file
+vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { desc = '[F]ormat current buffer' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
