@@ -144,4 +144,5 @@ esac
 # Cargo (Rust)
 . "$HOME/.cargo/env"
 
-source $HOME/Desktop/repos/alacritty/extra/completions/alacritty.bash
+export VISUAL=nvim
+export EDITOR=$VISUAL
