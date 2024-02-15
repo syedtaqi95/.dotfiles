@@ -32,7 +32,9 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # Cargo (Rust)
-. "$HOME/.cargo/env"
+if [ -d "$HOME/.cargo/env" ] ; then
+    PATH="$HOME/.cargo/env:$PATH"
+fi
 
 # Add Go to the path
 if [ -d "/usr/local/go/bin" ] ; then

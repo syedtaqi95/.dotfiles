@@ -154,19 +154,9 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    "catppuccin/nvim",
+    name = "catppuccin",
     priority = 1000,
-    opts = {
-      style = 'darker',
-      transparent = 'true',
-      lualine = {
-        transparent = true,
-      },
-    },
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
   },
 
   {
@@ -176,7 +166,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -379,6 +369,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+-- [[ Configure Catppuccin theme ]]
+require('catppuccin').setup({
+  transparent_background = true,
+})
+vim.cmd.colorscheme "catppuccin"
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -628,7 +624,7 @@ local servers = {
   pyright = {},
   rust_analyzer = {},
   tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html', 'twig', 'hbs' } },
   astro = {},
   tailwindcss = {},
 
