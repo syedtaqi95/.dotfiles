@@ -8,6 +8,10 @@ Neovim config based on kickstart.nvim with my mods :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Disable netrw as using alternative file explorer
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -206,13 +210,13 @@ require('lazy').setup({
     },
   },
 
-  -- Telescope file browser
+  -- File browser
   {
-    "nvim-telescope/telescope-file-browser.nvim",
+    "nvim-tree/nvim-tree.lua",
+    opts = {},
     dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim",
-    },
+      'nvim-tree/nvim-web-devicons'
+    }
   },
 
   {
@@ -468,7 +472,7 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
-vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { desc = '[F]ile [B]rowser' })
+vim.keymap.set('n', '<leader>fb', ':NvimTreeFindFileToggle!<CR>', { desc = '[F]ile [B]rowser' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
