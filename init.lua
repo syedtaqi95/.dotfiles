@@ -158,8 +158,8 @@ require('lazy').setup({
   },
 
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000,
   },
 
@@ -178,6 +178,12 @@ require('lazy').setup({
   },
 
   {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+  },
+
+  {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
@@ -186,7 +192,7 @@ require('lazy').setup({
     opts = {},
   },
 
-  -- "gc" to comment visual regions/lines
+  -- 'gc' to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -212,7 +218,7 @@ require('lazy').setup({
 
   -- File browser
   {
-    "nvim-tree/nvim-tree.lua",
+    'nvim-tree/nvim-tree.lua',
     opts = {},
     dependencies = {
       'nvim-tree/nvim-web-devicons'
@@ -242,13 +248,13 @@ require('lazy').setup({
   {
     'jose-elias-alvarez/null-ls.nvim',
     opts = function()
-      local null_ls = require("null-ls")
+      local null_ls = require('null-ls')
       local formatting = null_ls.builtins.formatting
 
       return {
         sources = {
           formatting.mdformat,
-          formatting.shfmt.with({ extra_args = { "-i", "4" } }),
+          formatting.shfmt.with({ extra_args = { '-i', '4' } }),
           formatting.prettier,
           formatting.black,
         },
@@ -258,11 +264,11 @@ require('lazy').setup({
 
   -- Surround selected text with brackets, quotes etc.
   {
-    "kylechui/nvim-surround",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
     config = function()
-      require("nvim-surround").setup({
+      require('nvim-surround').setup({
         -- Configuration here, or leave empty to use defaults
       })
     end
@@ -270,10 +276,10 @@ require('lazy').setup({
 
   -- Markdown preview
   {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function() vim.fn["mkdp#util#install"]() end,
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function() vim.fn['mkdp#util#install']() end,
   },
   -- NOTE: The import below can automatically add your own plugins,
   -- configuration, etc from `lua/custom/plugins/*.lua`
@@ -304,7 +310,7 @@ vim.wo.number = true
 -- Make line numbers relative
 vim.o.relativenumber = true
 
-vim.o.colorcolumn = "80"
+vim.o.colorcolumn = '80'
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -378,7 +384,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 require('catppuccin').setup({
   transparent_background = true,
 })
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme 'catppuccin'
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -463,7 +469,7 @@ vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc =
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sfh', function()
-    require "telescope.builtin".find_files({ hidden = true })
+    require 'telescope.builtin'.find_files({ hidden = true })
   end,
   { desc = '[S]earch [F]iles [H]idden' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
