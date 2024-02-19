@@ -367,7 +367,14 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Format file
-vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat current buffer' })
+vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat [F]ile' })
+
+-- Navigate buffers
+vim.keymap.set('n', ']b', ':bn<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = '[N]ext buffer' })
+vim.keymap.set('n', '[b', ':bp<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = '[P]revious buffer' })
+vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = '[D]elete buffer' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -597,6 +604,7 @@ end
 
 -- document existing key chains
 require('which-key').register {
+  ['<leader>b'] = { name = '[B]uffer', _ = 'which_key_ignore' },
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
@@ -723,6 +731,9 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- [[ Configure bufferline]]
+require('bufferline').setup {}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
