@@ -166,11 +166,10 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
-        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -178,6 +177,7 @@ require('lazy').setup({
   },
 
   {
+    -- Shows open buffers at the top
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
@@ -219,7 +219,11 @@ require('lazy').setup({
   -- File browser
   {
     'nvim-tree/nvim-tree.lua',
-    opts = {},
+    opts = {
+      view = {
+        width = {}, -- Fits column width to contents
+      }
+    },
     dependencies = {
       'nvim-tree/nvim-web-devicons'
     }
