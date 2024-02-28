@@ -250,6 +250,9 @@ require('lazy').setup({
           end,
         },
       },
+      filters = {
+        git_ignored = false,
+      },
     },
     dependencies = {
       'nvim-tree/nvim-web-devicons'
