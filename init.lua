@@ -266,6 +266,17 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+
+      -- MDX
+      vim.filetype.add({
+        extension = {
+          mdx = "mdx",
+        },
+      })
+      vim.treesitter.language.register("markdown", "mdx")
+    end,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins"
@@ -677,6 +688,7 @@ local servers = {
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   astro = {},
   tailwindcss = {},
+  mdx_analyzer = { filetypes = { 'mdx' } },
 
   lua_ls = {
     Lua = {
