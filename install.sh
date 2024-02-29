@@ -46,16 +46,16 @@ SOURCE="$SCRIPT_DIR/.gitconfig"
 TARGET="$HOME/.gitconfig"
 create_symlink "$SOURCE" "$TARGET"
 
-# .profile
-echo
-echo "Linking .profile..."
-SOURCE="$SCRIPT_DIR/.profile"
-TARGET="$HOME/.profile"
-create_symlink "$SOURCE" "$TARGET"
-
 # .bashrc
 echo
 echo "Linking .bashrc..."
 SOURCE="$SCRIPT_DIR/.bashrc"
 TARGET="$HOME/.bashrc"
+create_symlink "$SOURCE" "$TARGET"
+
+# Starship
+echo
+echo "Linking starship.toml..."
+SOURCE="$SCRIPT_DIR/starship.toml"
+TARGET="$HOME/.config/starship.toml"
 create_symlink "$SOURCE" "$TARGET"

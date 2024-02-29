@@ -121,6 +121,12 @@ if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
     source $HOME/.bash-git-prompt/gitprompt.sh
 fi
 
+# Cargo (Rust)
+[ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
+
+# Starship prompt
+[ -s "$HOME/.cargo/bin/starship" ] && eval "$(starship init bash)"
+
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
@@ -141,8 +147,10 @@ case ":$PATH:" in
 *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# Cargo (Rust)
-. "$HOME/.cargo/env"
+# Add Go to the path
+if [ -d "/usr/local/go/bin" ] ; then
+    PATH="/usr/local/go/bin:$PATH"
+fi
 
 export VISUAL=nvim
 export EDITOR=$VISUAL
