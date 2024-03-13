@@ -708,6 +708,26 @@ local servers = {
   astro = {},
   tailwindcss = {},
   mdx_analyzer = { filetypes = { 'mdx' } },
+  cssls = {
+    css = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    scss = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    less = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+  },
 
   lua_ls = {
     Lua = {
