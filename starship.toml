@@ -4,3 +4,7 @@ use_12hr = true
 
 [username]
 show_always = true
+
+[directory]
+truncation_length = 10
+truncate_to_repo = false
