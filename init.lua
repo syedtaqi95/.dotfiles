@@ -706,7 +706,16 @@ local servers = {
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   astro = {},
-  tailwindcss = {},
+  tailwindcss = {
+    tailwindCSS = {
+      experimental = {
+        classRegex = {
+          { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+          { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" }
+        },
+      },
+    },
+  },
   mdx_analyzer = { filetypes = { 'mdx' } },
   cssls = {
     css = {
