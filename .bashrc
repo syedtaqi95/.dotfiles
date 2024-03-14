@@ -148,9 +148,12 @@ case ":$PATH:" in
 esac
 
 # Add Go to the path
-if [ -d "/usr/local/go/bin" ] ; then
+if [ -d "/usr/local/go/bin" ]; then
     PATH="/usr/local/go/bin:$PATH"
 fi
+
+# Add GOPATH to path
+[ -d "$(go env GOPATH)/bin" ] && PATH="$PATH:$(go env GOPATH)/bin"
 
 export VISUAL=nvim
 export EDITOR=$VISUAL
