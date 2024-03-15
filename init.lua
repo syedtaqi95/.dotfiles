@@ -448,6 +448,10 @@ vim.keymap.set('n', '[b', ':bp<CR>', { desc = 'Previous buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = '[P]revious buffer' })
 vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = '[D]elete buffer' })
 
+-- Git log (using vim-flog)
+vim.keymap.set('n', '<C-L>', ':Flog<CR>', { desc = 'Open Git [L]og' })
+vim.keymap.set('n', '<C-G>', ':G<CR>', { desc = 'Open [G]it status' })
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
