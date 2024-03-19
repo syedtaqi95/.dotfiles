@@ -347,6 +347,17 @@ require('lazy').setup({
     config = true,      -- default settings
     submodules = false, -- not needed, submodules are required only for tests
   },
+
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
+
   -- NOTE: The import below can automatically add your own plugins,
   -- configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if
@@ -448,7 +459,7 @@ vim.keymap.set('n', '[b', ':bp<CR>', { desc = 'Previous buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = '[P]revious buffer' })
 vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = '[D]elete buffer' })
 
--- Git log (using vim-flog)
+-- Git log and status (using vim-flog)
 vim.keymap.set('n', '<C-L>', ':Flog<CR>', { desc = 'Open Git [L]og' })
 vim.keymap.set('n', '<C-G>', ':G<CR>', { desc = 'Open [G]it status' })
 
@@ -840,6 +851,18 @@ cmp.setup {
 
 -- [[ Configure bufferline]]
 require('bufferline').setup {}
+
+-- [[ Configure todo-comments.nvim ]]
+vim.keymap.set("n", "]t", function()
+  require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+vim.keymap.set("n", "[t", function()
+  require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
+
+vim.keymap.set("n", "<leader>tq", ":TodoQuickFix<CR>", { desc = "[T]odo [Q]uickfix" })
+vim.keymap.set("n", "<leader>tt", ":TodoTelescope<CR>", { desc = "[T]odo [T]elescope" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
