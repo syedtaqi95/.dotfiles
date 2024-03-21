@@ -776,6 +776,7 @@ local servers = {
       }
     },
   },
+  eslint = {},
 
   lua_ls = {
     Lua = {
