@@ -71,6 +71,23 @@ require('lazy').setup({
     },
   },
 
+  -- Install typescript LSP separately due to some issues, e.g. go to source
+  -- definition does not work with typescript-language-server
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {
+      on_attach = function(_, bufnr)
+        vim.keymap.set('n', 'gs', ':TSToolsGoToSourceDefinition<CR>',
+          {
+            buffer = bufnr,
+            desc = 'LSP: [G]oto [S]ource Definition',
+            silent = true,
+          })
+      end
+    },
+  },
+
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -723,7 +740,7 @@ local servers = {
   },
   pyright = {},
   rust_analyzer = {},
-  tsserver = {},
+  -- tsserver = {}, -- Using typescript-tools.nvim instead
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   htmx = {},
   astro = {},
@@ -731,6 +748,7 @@ local servers = {
     tailwindCSS = {
       experimental = {
         classRegex = {
+          { "[\"'`](.*?)[\"'`]" }, -- for tailwind-variants
           { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
           { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" }
         },
