@@ -169,6 +169,7 @@ require('lazy').setup({
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
+    opts = { transparent_background = true },
   },
 
   {
@@ -193,6 +194,7 @@ require('lazy').setup({
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
+    opts = {},
   },
 
   {
@@ -211,6 +213,17 @@ require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
+    opts = {
+      defaults = {
+        mappings = {
+          i = {
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
+          },
+        },
+        path_display = { "truncate" },
+      },
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -275,17 +288,6 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-
-      -- MDX
-      vim.filetype.add({
-        extension = {
-          mdx = "mdx",
-        },
-      })
-      vim.treesitter.language.register("markdown", "mdx")
-    end,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins"
@@ -296,7 +298,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
 
   -- Auto close brackets and other pairs
-  { 'm4xshen/autoclose.nvim', opts = {} },
+  { 'm4xshen/autoclose.nvim',         opts = {} },
 
   -- Use null-ls for linters, formatters etc. that don't support LSP
   {
@@ -321,11 +323,7 @@ require('lazy').setup({
     'kylechui/nvim-surround',
     version = '*', -- Use for stability; omit to use `main` branch for the latest features
     event = 'VeryLazy',
-    config = function()
-      require('nvim-surround').setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end
+    opts = {},
   },
 
   -- Markdown preview
@@ -357,6 +355,8 @@ require('lazy').setup({
       -- refer to the configuration section below
     }
   },
+
+  { "lukas-reineke/virt-column.nvim", opts = {} },
 
   -- NOTE: The import below can automatically add your own plugins,
   -- configuration, etc from `lua/custom/plugins/*.lua`
@@ -474,25 +474,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
--- [[ Configure Catppuccin theme ]]
-require('catppuccin').setup({
-  transparent_background = true,
-})
+-- [[ Configure color scheme ]]
 vim.cmd.colorscheme 'catppuccin'
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
-require('telescope').setup {
-  defaults = {
-    mappings     = {
-      i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
-      },
-    },
-    path_display = { "truncate" },
-  },
-}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -575,7 +561,7 @@ vim.keymap.set('n', '<leader>fb', ':NvimTreeFindFileToggle!<CR>', { desc = '[F]i
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'graphql' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'graphql', 'markdown' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = true,
@@ -636,6 +622,14 @@ vim.defer_fn(function()
       },
     },
   }
+
+  -- MDX
+  vim.filetype.add({
+    extension = {
+      mdx = "mdx",
+    },
+  })
+  vim.treesitter.language.register("markdown", "mdx")
 end, 0)
 
 -- [[ Configure LSP ]]
@@ -851,9 +845,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
--- [[ Configure bufferline]]
-require('bufferline').setup {}
 
 -- [[ Configure todo-comments.nvim ]]
 vim.keymap.set("n", "]t", function()
