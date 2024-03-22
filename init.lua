@@ -739,6 +739,7 @@ local servers = {
     cmd = { "gopls" },
   },
   pyright = {},
+  ruff_lsp = {},
   rust_analyzer = {},
   -- tsserver = {}, -- Using typescript-tools.nvim instead
   html = { filetypes = { 'html', 'twig', 'hbs' } },
