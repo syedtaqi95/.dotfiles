@@ -651,20 +651,23 @@ end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
-  --
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
-
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
     end
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+  end
+
+  if client.name == 'ruff_lsp' then
+    -- Disable hover in favour of pyright
+    client.server_capabilities.hoverProvider = false
   end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
