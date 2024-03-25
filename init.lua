@@ -469,6 +469,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- Format file
 vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { desc = '[F]ormat [F]ile' })
 
+-- Save file
+vim.keymap.set('n', '<C-S>', ':w<CR>', { desc = '[S]ave buffer' })
+
 -- Navigate buffers
 vim.keymap.set('n', ']b', ':bn<CR>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = '[N]ext buffer' })
