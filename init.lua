@@ -748,7 +748,7 @@ local servers = {
   ruff_lsp = {},
   rust_analyzer = {},
   -- tsserver = {}, -- Using typescript-tools.nvim instead
-  html = { filetypes = { 'html', 'twig', 'hbs' } },
+  html = { filetypes = { 'html', 'twig', 'hbs', 'template' } },
   htmx = {},
   astro = {},
   tailwindcss = {
