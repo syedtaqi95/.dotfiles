@@ -477,7 +477,7 @@ vim.keymap.set('n', ']b', ':bn<CR>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<leader>bn', ':bn<CR>', { desc = '[N]ext buffer' })
 vim.keymap.set('n', '[b', ':bp<CR>', { desc = 'Previous buffer' })
 vim.keymap.set('n', '<leader>bp', ':bp<CR>', { desc = '[P]revious buffer' })
-vim.keymap.set('n', '<leader>bd', ':bd<CR>', { desc = '[D]elete buffer' })
+vim.keymap.set('n', '<leader>bd', ':bp|bd #<CR>', { desc = '[D]elete buffer' })
 
 -- Git log and status (using vim-flog)
 vim.keymap.set('n', '<C-L>', ':Flog<CR>', { desc = 'Open Git [L]og' })
