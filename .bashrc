@@ -155,5 +155,8 @@ fi
 # Add GOPATH to path
 [ -d "$(go env GOPATH)/bin" ] && PATH="$PATH:$(go env GOPATH)/bin"
 
+# Neovim
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
 export VISUAL=nvim
 export EDITOR=$VISUAL
