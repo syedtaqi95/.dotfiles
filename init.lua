@@ -209,7 +209,7 @@ require('lazy').setup({
       },
       sections = {
         lualine_c = { { 'filename', path = 1 } },
-        lualine_x = { 'encoding', 'filetype' },
+        lualine_x = { 'swenv', 'encoding', 'filetype' },
       },
     },
   },
@@ -382,6 +382,8 @@ require('lazy').setup({
   },
 
   { "lukas-reineke/virt-column.nvim", opts = {} },
+
+  "AckslD/swenv.nvim",
 
   -- NOTE: The import below can automatically add your own plugins,
   -- configuration, etc from `lua/custom/plugins/*.lua`
