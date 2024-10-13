@@ -814,6 +814,9 @@ local servers = {
       -- diagnostics = { disable = { 'missing-fields' } },
     },
   },
+
+  asm_lsp = {},
+  clangd = {},
 }
 
 -- Setup neovim lua configuration
