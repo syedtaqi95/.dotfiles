@@ -259,6 +259,7 @@ require('lazy').setup({
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
+      "nvim-telescope/telescope-live-grep-args.nvim",
       -- Fuzzy Finder Algorithm which requires local dependencies to be built.
       -- Only load if `make` is available. Make sure you have the system
       -- requirements installed.
@@ -522,12 +523,29 @@ vim.cmd.colorscheme 'catppuccin'
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+local lga_actions = require("telescope-live-grep-args.actions")
+
+require("telescope").setup {
+  extensions = {
+    live_grep_args = {
+      mappings = {
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt(),
+          ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+        },
+      },
+    }
+  }
+}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
 -- Enable telescope file browser, if installed
 pcall(require('telescope').load_extension, 'file_browser')
+
+-- Enable telescope live grep args, if installed
+pcall(require('telescope').load_extension, 'live_grep_args')
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -557,7 +575,7 @@ end
 local function live_grep_git_root()
   local git_root = find_git_root()
   if git_root then
-    require('telescope.builtin').live_grep {
+    require('telescope').extensions.live_grep_args.live_grep_args {
       search_dirs = { git_root },
     }
   end
@@ -597,7 +615,8 @@ vim.keymap.set('n', '<leader>sfh', function()
   { desc = '[S]earch [F]iles [H]idden' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sg', require('telescope').extensions.live_grep_args.live_grep_args,
+  { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
