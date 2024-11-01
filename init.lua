@@ -246,20 +246,8 @@ require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
-    opts = {
-      defaults = {
-        mappings = {
-          i = {
-            ['<C-u>'] = false,
-            ['<C-d>'] = false,
-          },
-        },
-        path_display = { "truncate" },
-      },
-    },
     dependencies = {
       'nvim-lua/plenary.nvim',
-      "nvim-telescope/telescope-live-grep-args.nvim",
       -- Fuzzy Finder Algorithm which requires local dependencies to be built.
       -- Only load if `make` is available. Make sure you have the system
       -- requirements installed.
@@ -272,7 +260,42 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      "nvim-telescope/telescope-live-grep-args.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "debugloop/telescope-undo.nvim",
     },
+    opts = function()
+      local lga_actions = require("telescope-live-grep-args.actions")
+
+      return {
+        defaults = {
+          mappings = {
+            i = {
+              ['<C-u>'] = false,
+              ['<C-d>'] = false,
+            },
+          },
+          path_display = { "truncate" },
+        },
+        extensions = {
+          live_grep_args = {
+            mappings = {
+              i = {
+                ["<C-k>"] = lga_actions.quote_prompt(),
+                ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+              },
+            },
+          },
+          undo = {
+            side_by_side = true,
+            layout_strategy = "vertical",
+            layout_config = {
+              preview_height = 0.6,
+            },
+          },
+        },
+      }
+    end,
   },
 
   -- File browser
@@ -523,20 +546,6 @@ vim.cmd.colorscheme 'catppuccin'
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
-local lga_actions = require("telescope-live-grep-args.actions")
-
-require("telescope").setup {
-  extensions = {
-    live_grep_args = {
-      mappings = {
-        i = {
-          ["<C-k>"] = lga_actions.quote_prompt(),
-          ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
-        },
-      },
-    }
-  }
-}
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
@@ -546,6 +555,12 @@ pcall(require('telescope').load_extension, 'file_browser')
 
 -- Enable telescope live grep args, if installed
 pcall(require('telescope').load_extension, 'live_grep_args')
+
+-- Enable telescope ui select, if installed
+pcall(require('telescope').load_extension, 'ui-select')
+
+-- Enable telescope undo, if installed
+pcall(require('telescope').load_extension, 'undo')
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
@@ -620,6 +635,7 @@ vim.keymap.set('n', '<leader>sg', require('telescope').extensions.live_grep_args
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+vim.keymap.set('n', '<leader>u', "<cmd>Telescope undo<cr>", { desc = 'Telescope [U]ndo' })
 vim.keymap.set('n', '<leader>fb', ':NvimTreeFindFileToggle!<CR>', { desc = '[F]ile [B]rowser' })
 
 -- [[ Configure Treesitter ]]
