@@ -227,7 +227,70 @@ require('lazy').setup({
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    opts = {},
+    opts = {
+      highlights = {
+        fill = {
+          bg = 'none'
+        },
+        tab_selected = {
+          bg = 'none'
+        },
+        tab_separator_selected = {
+          bg = 'none'
+        },
+        close_button_selected = {
+          bg = 'none'
+        },
+        buffer_selected = {
+          bg = 'none'
+        },
+        numbers_selected = {
+          bg = 'none'
+        },
+        diagnostic_selected = {
+          bg = 'none'
+        },
+        hint_selected = {
+          bg = 'none'
+        },
+        hint_diagnostic_selected = {
+          bg = 'none'
+        },
+        info_selected = {
+          bg = 'none'
+        },
+        info_diagnostic_selected = {
+          bg = 'none'
+        },
+        warning_selected = {
+          bg = 'none'
+        },
+        warning_diagnostic_selected = {
+          bg = 'none'
+        },
+        error_selected = {
+          bg = 'none'
+        },
+        error_diagnostic_selected = {
+          bg = 'none'
+        },
+        modified_selected = {
+          bg = 'none'
+        },
+        duplicate_selected = {
+          bg = 'none'
+        },
+        separator_selected = {
+          bg = 'none'
+        },
+        indicator_selected = {
+          bg = 'none'
+        },
+        pick_selected = {
+          bg = 'none'
+        },
+      }
+    },
   },
 
   {
@@ -288,10 +351,6 @@ require('lazy').setup({
           },
           undo = {
             side_by_side = true,
-            layout_strategy = "vertical",
-            layout_config = {
-              preview_height = 0.6,
-            },
           },
         },
       }
