@@ -217,7 +217,7 @@ require('lazy').setup({
       },
       sections = {
         lualine_c = { { 'filename', path = 1 } },
-        lualine_x = { 'swenv', 'encoding', 'filetype' },
+        lualine_x = { 'swenv', 'filetype' },
       },
     },
   },
