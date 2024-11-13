@@ -897,7 +897,7 @@ end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -909,11 +909,6 @@ local on_attach = function(client, bufnr)
     end
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-  end
-
-  if client.name == 'ruff_lsp' then
-    -- Disable hover in favour of pyright
-    client.server_capabilities.hoverProvider = false
   end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -999,7 +994,7 @@ local servers = {
     cmd = { "gopls" },
   },
   pyright = {},
-  ruff_lsp = {},
+  ruff = {},
   rust_analyzer = {},
   -- tsserver = {}, -- Using typescript-tools.nvim instead
   html = { filetypes = { 'html', 'twig', 'hbs', 'template' } },
