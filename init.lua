@@ -449,6 +449,7 @@ require('lazy').setup({
     },
     opts = function()
       local lga_actions = require("telescope-live-grep-args.actions")
+      local telescope_actions = require("telescope.actions")
 
       return {
         defaults = {
@@ -456,6 +457,8 @@ require('lazy').setup({
             i = {
               ['<C-u>'] = false,
               ['<C-d>'] = false,
+              ["<C-Down>"] = telescope_actions.cycle_history_next,
+              ["<C-Up>"] = telescope_actions.cycle_history_prev,
             },
           },
           path_display = { "truncate" },
