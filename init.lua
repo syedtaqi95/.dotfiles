@@ -463,6 +463,15 @@ require('lazy').setup({
           },
           path_display = { "truncate" },
         },
+        pickers = {
+          diagnostics = {
+            layout_strategy = 'vertical',
+            layout_config = {
+              preview_cutoff = 0,
+              preview_height = 0.4,
+            },
+          },
+        },
         extensions = {
           live_grep_args = {
             mappings = {
