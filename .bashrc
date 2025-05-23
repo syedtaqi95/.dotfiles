@@ -176,6 +176,7 @@ if [ -f "$HOME/.rover/env" ]; then
     source "$HOME/.rover/env"
 fi
 
+# Graphite
 if command -v gt >/dev/null 2>&1; then
     ###-begin-gt-completions-###
     #
@@ -205,4 +206,14 @@ if command -v gt >/dev/null 2>&1; then
 
     complete -o bashdefault -o default -F _gt_yargs_completions gt
     ###-end-gt-completions-###
+fi
+
+# uv bash completions (if installed)
+if command -v uv >/dev/null 2>&1; then
+    eval "$(uv generate-shell-completion bash)"
+fi
+
+# uvx bash completions (if installed)
+if command -v uvx >/dev/null 2>&1; then
+    eval "$(uvx --generate-shell-completion bash)"
 fi
