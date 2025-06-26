@@ -419,7 +419,7 @@ require('lazy').setup({
         map({ 'n' }, '[d', function()
           vim.diagnostic.jump({ count = -1, float = true, border = 'rounded' })
         end, { desc = 'Jump to previous diagnostic message' })
-        map({ 'n' }, '[d', function()
+        map({ 'n' }, ']d', function()
           vim.diagnostic.jump({ count = 1, float = true, border = 'rounded' })
         end, { desc = 'Jump to next diagnostic message' })
 
