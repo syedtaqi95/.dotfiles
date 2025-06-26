@@ -107,41 +107,101 @@ vim.keymap.set('n', '<leader>bd', ':bp|bd #<CR>', { desc = '[D]elete buffer' })
 vim.keymap.set('n', '<C-L>', ':Flog<CR>', { desc = 'Open Git [L]og' })
 vim.keymap.set('n', '<C-G>', ':G<CR>', { desc = 'Open [G]it status' })
 
--- Called in the "on attach" functions of the LSP plugins
---- @param bufnr integer
-local function setup_lsp_keymaps(bufnr)
-  local nmap = function(keys, func, desc, mode)
-    mode = mode or 'n'
-    vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
-  end
+--  [[ LSP Configuration ]]
+--  Enable the following language servers
+--  Feel free to add/remove any LSPs that you want here. They will
+--  automatically be installed.
+--
+--  Add any additional override configuration in the following tables. They
+--  will be passed to the `settings` field of the server config. You must look
+--  up that documentation yourself.
+--
+--  If you want to override the default filetypes that your language server
+--  will attach to you can define the property 'filetypes' to the map in question.
+local servers = {
+  -- clangd = {},
+  gopls = {
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    cmd = { "gopls" },
+  },
+  pyright = {},
+  ruff = {},
+  rust_analyzer = {},
+  ts_ls = { filetypes = { "typescript", "typescriptreact" } },
+  html = { filetypes = { 'html', 'twig', 'hbs', 'template' } },
+  astro = {},
+  tailwindcss = {
+    tailwindCSS = {
+      experimental = {
+        classRegex = {
+          { "[\"'`](.*?)[\"'`]" }, -- for tailwind-variants
+          { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+          { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" }
+        },
+      },
+    },
+  },
+  mdx_analyzer = { filetypes = { 'mdx' } },
+  cssls = {
+    css = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    scss = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    less = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+  },
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- Toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      diagnostics = { disable = { 'missing-fields' } },
+    },
+  },
+  asm_lsp = {},
+  clangd = {},
+}
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  nmap('gr', function()
-    require('telescope.builtin').lsp_references({ show_line = false })
-  end, '[G]oto [R]eferences')
-  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Format file
-  nmap('<leader>ff', vim.lsp.buf.format, '[F]ormat [F]ile', 'n')
-
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
-end
+-- Diagnostic Config
+-- See :help vim.diagnostic.Opts
+vim.diagnostic.config {
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = vim.diagnostic.severity.ERROR },
+  signs = vim.g.have_nerd_font and {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '󰅚 ',
+      [vim.diagnostic.severity.WARN] = '󰀪 ',
+      [vim.diagnostic.severity.INFO] = '󰋽 ',
+      [vim.diagnostic.severity.HINT] = '󰌶 ',
+    },
+  } or {},
+  virtual_text = {
+    source = 'if_many',
+    spacing = 2,
+    format = function(diagnostic)
+      local diagnostic_message = {
+        [vim.diagnostic.severity.ERROR] = diagnostic.message,
+        [vim.diagnostic.severity.WARN] = diagnostic.message,
+        [vim.diagnostic.severity.INFO] = diagnostic.message,
+        [vim.diagnostic.severity.HINT] = diagnostic.message,
+      }
+      return diagnostic_message[diagnostic.severity]
+    end,
+  },
+}
 
 -- [[ Basic Autocommands ]]
 
@@ -221,207 +281,60 @@ require('lazy').setup({
   -- Main LSP Configuration
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      { 'mason-org/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
-      -- Useful status updates for LSP
-      { 'j-hui/fidget.nvim',    opts = {} },
 
-      -- Allows extra capabilities provided by blink.cmp
+    dependencies = {
+      { 'mason-org/mason.nvim',           opts = {} },
+      { 'mason-org/mason-lspconfig.nvim', opts = { ensure_installed = vim.tbl_keys(servers) } },
+      { 'j-hui/fidget.nvim',              opts = {} },
       'saghen/blink.cmp',
     },
+
     config = function()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      for name, cfg in pairs(servers) do
+        cfg.capabilities = vim.tbl_deep_extend('force', capabilities, cfg.capabilities or {})
+        vim.lsp.config[name] = cfg
+      end
+
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
         callback = function(event)
-          setup_lsp_keymaps(event.buf)
+          local bufnr = event.buf
 
-          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-          ---@param client vim.lsp.Client
-          ---@param method vim.lsp.protocol.Method
-          ---@param bufnr? integer some lsp support methods only in specific files
-          ---@return boolean
-          local function client_supports_method(client, method, bufnr)
-            if vim.fn.has 'nvim-0.11' == 1 then
-              return client:supports_method(method, bufnr)
-            else
-              return client.supports_method(method, { bufnr = bufnr })
-            end
+          local nmap = function(keys, func, desc, mode)
+            mode = mode or 'n'
+            vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
           end
 
-          -- The following two autocommands are used to highlight references of the
-          -- word under your cursor when your cursor rests there for a little while.
+          nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-          --   local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
-          --   vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-          --     buffer = event.buf,
-          --     group = highlight_augroup,
-          --     callback = vim.lsp.buf.document_highlight,
-          --   })
-          --
-          --   vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-          --     buffer = event.buf,
-          --     group = highlight_augroup,
-          --     callback = vim.lsp.buf.clear_references,
-          --   })
-          --
-          --   vim.api.nvim_create_autocmd('LspDetach', {
-          --     group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
-          --     callback = function(event2)
-          --       vim.lsp.buf.clear_references()
-          --       vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = event2.buf }
-          --     end,
-          --   })
-          -- end
+          nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          nmap('gr', function()
+            require('telescope.builtin').lsp_references({ show_line = false })
+          end, '[G]oto [R]eferences')
+          nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+          nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-          -- The following code creates a keymap to toggle inlay hints in your
-          -- code, if the language server you are using supports them
-          -- This may be unwanted, since they displace some of your code
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            vim.keymap.set('n', '<leader>th', function()
-                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-              end,
-              { buffer = event.buf, desc = "LSP: '[T]oggle Inlay [H]ints'" })
-          end
+          -- See `:help K` for this keymap
+          nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+          nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+          -- Format file
+          nmap('<leader>ff', vim.lsp.buf.format, '[F]ormat [F]ile', 'n')
+
+          -- Lesser used LSP functionality
+          nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+          nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+          nmap('<leader>wl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+          end, '[W]orkspace [L]ist Folders')
         end,
       })
-
-      -- Diagnostic Config
-      -- See :help vim.diagnostic.Opts
-      vim.diagnostic.config {
-        severity_sort = true,
-        float = { border = 'rounded', source = true },
-        underline = { severity = vim.diagnostic.severity.ERROR },
-        signs = vim.g.have_nerd_font and {
-          text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
-          },
-        } or {},
-        virtual_text = {
-          source = true,
-          spacing = 2,
-          format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-          end,
-        },
-      }
-
-      vim.keymap.set('n', '[d', function()
-        vim.diagnostic.jump({ count = -1, float = true, border = 'rounded' })
-      end, { desc = 'Jump to previous diagnostic message' })
-
-      vim.keymap.set('n', ']d', function()
-        vim.diagnostic.jump({ count = 1, float = true, border = 'rounded' })
-      end, { desc = 'Jump to next diagnostic message' })
-
-
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-
-      -- Enable the following language servers
-      --  Feel free to add/remove any LSPs that you want here. They will
-      --  automatically be installed.
-      --
-      --  Add any additional override configuration in the following tables. They
-      --  will be passed to the `settings` field of the server config. You must look
-      --  up that documentation yourself.
-      --
-      --  If you want to override the default filetypes that your language server
-      --  will attach to you can define the property 'filetypes' to the map in question.
-      local servers = {
-        -- clangd = {},
-        gopls = {
-          filetypes = { "go", "gomod", "gowork", "gotmpl" },
-          cmd = { "gopls" },
-        },
-        pyright = {},
-        ruff = {},
-        rust_analyzer = {},
-        ts_ls = {}, -- Using typescript-tools.nvim instead
-        html = { filetypes = { 'html', 'twig', 'hbs', 'template' } },
-        htmx = {},
-        astro = {},
-        tailwindcss = {
-          tailwindCSS = {
-            experimental = {
-              classRegex = {
-                { "[\"'`](.*?)[\"'`]" }, -- for tailwind-variants
-                { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-                { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" }
-              },
-            },
-          },
-        },
-        mdx_analyzer = { filetypes = { 'mdx' } },
-        cssls = {
-          css = {
-            validate = true,
-            lint = {
-              unknownAtRules = "ignore"
-            }
-          },
-          scss = {
-            validate = true,
-            lint = {
-              unknownAtRules = "ignore"
-            }
-          },
-          less = {
-            validate = true,
-            lint = {
-              unknownAtRules = "ignore"
-            }
-          },
-        },
-        lua_ls = {
-          Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-            -- Toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            diagnostics = { disable = { 'missing-fields' } },
-          },
-        },
-        asm_lsp = {},
-        clangd = {},
-      }
-
-      -- Ensure the servers above are installed
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua',
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      require('mason-lspconfig').setup {
-        ensure_installed = vim.tbl_keys(servers or {}),
-        automatic_enable = true,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
     end,
   },
 
@@ -501,6 +414,14 @@ require('lazy').setup({
           end)
           return '<Ignore>'
         end, { expr = true, desc = 'Jump to previous hunk' })
+
+        -- Jump to diagnostic messages
+        map({ 'n' }, '[d', function()
+          vim.diagnostic.jump({ count = -1, float = true, border = 'rounded' })
+        end, { desc = 'Jump to previous diagnostic message' })
+        map({ 'n' }, '[d', function()
+          vim.diagnostic.jump({ count = 1, float = true, border = 'rounded' })
+        end, { desc = 'Jump to next diagnostic message' })
 
         -- Actions
         -- visual mode
