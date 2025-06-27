@@ -98,6 +98,13 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+vim.keymap.set({ 'n' }, '[d', function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = 'Jump to previous diagnostic message' })
+vim.keymap.set({ 'n' }, ']d', function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = 'Jump to next diagnostic message' })
+
 
 -- Save file
 vim.keymap.set('n', '<C-S>', ':w<CR>', { desc = '[S]ave buffer' })
@@ -444,14 +451,6 @@ require('lazy').setup({
           end)
           return '<Ignore>'
         end, { expr = true, desc = 'Jump to previous hunk' })
-
-        -- Jump to diagnostic messages
-        map({ 'n' }, '[d', function()
-          vim.diagnostic.jump({ count = -1, float = true, border = 'rounded' })
-        end, { desc = 'Jump to previous diagnostic message' })
-        map({ 'n' }, ']d', function()
-          vim.diagnostic.jump({ count = 1, float = true, border = 'rounded' })
-        end, { desc = 'Jump to next diagnostic message' })
 
         -- Actions
         -- visual mode
