@@ -75,6 +75,12 @@ vim.o.termguicolors = true
 -- Min distance of cursor from screen top/bottom
 vim.o.scrolloff = 4
 
+-- Fix indentations
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -127,8 +133,11 @@ local servers = {
   pyright = {},
   ruff = {},
   rust_analyzer = {},
-  ts_ls = { filetypes = { "typescript", "typescriptreact" } },
-  html = { filetypes = { 'html', 'twig', 'hbs', 'template' } },
+  -- ts_ls = {}, -- Using typescript-tools.nvim
+  taplo = {},
+  html = {
+    filetypes = { 'html', 'twig', 'hbs', 'template' }
+  },
   astro = {},
   tailwindcss = {
     tailwindCSS = {
@@ -141,34 +150,41 @@ local servers = {
       },
     },
   },
-  mdx_analyzer = { filetypes = { 'mdx' } },
+  mdx_analyzer = {
+    filetypes = { 'mdx' }
+  },
   cssls = {
-    css = {
-      validate = true,
-      lint = {
-        unknownAtRules = "ignore"
-      }
-    },
-    scss = {
-      validate = true,
-      lint = {
-        unknownAtRules = "ignore"
-      }
-    },
-    less = {
-      validate = true,
-      lint = {
-        unknownAtRules = "ignore"
+    settings = {
+      css = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
+      },
+      scss = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
+      },
+      less = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
       }
     },
   },
   lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      -- Toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      diagnostics = { disable = { 'missing-fields' } },
-    },
+    filetypes = { "lua" },
+    settings = {
+      Lua = {
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+        -- Toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+        diagnostics = { disable = { 'missing-fields' } },
+      },
+    }
   },
   asm_lsp = {},
   clangd = {},
@@ -264,7 +280,7 @@ require('lazy').setup({
     },
   },
 
-  -- LSP Plugins
+  -- [[ LSP Plugins ]]
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -275,6 +291,23 @@ require('lazy').setup({
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
+    },
+  },
+
+  -- Install typescript LSP separately due to some issues, e.g. go to source
+  -- definition does not work with typescript-language-server
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {
+      on_attach = function(_, bufnr)
+        vim.keymap.set('n', 'gs', ':TSToolsGoToSourceDefinition<CR>',
+          {
+            buffer = bufnr,
+            desc = 'LSP: [G]oto [S]ource Definition',
+            silent = true,
+          })
+      end
     },
   },
 
@@ -302,35 +335,32 @@ require('lazy').setup({
         callback = function(event)
           local bufnr = event.buf
 
-          local nmap = function(keys, func, desc, mode)
+          local map = function(keys, func, desc, mode)
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
           end
 
-          nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-          nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-          nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-          nmap('gr', function()
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          map('gr', function()
             require('telescope.builtin').lsp_references({ show_line = false })
           end, '[G]oto [R]eferences')
-          nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-          nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-          nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>ff', vim.lsp.buf.format, '[F]ormat [F]ile', 'n')
 
           -- See `:help K` for this keymap
-          nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-          nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-          -- Format file
-          nmap('<leader>ff', vim.lsp.buf.format, '[F]ormat [F]ile', 'n')
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
           -- Lesser used LSP functionality
-          nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-          nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-          nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-          nmap('<leader>wl', function()
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+          map('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+          map('<leader>wl', function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
           end, '[W]orkspace [L]ist Folders')
         end,
