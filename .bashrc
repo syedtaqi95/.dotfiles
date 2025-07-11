@@ -217,3 +217,34 @@ fi
 if command -v uvx >/dev/null 2>&1; then
     eval "$(uvx --generate-shell-completion bash)"
 fi
+
+# tmux magic
+
+tmux() {
+  # only intercept "tmux new" or "tmux new-session"
+  if [[ "$1" == "new" || "$1" == "new-session" ]]; then
+    local subcmd="$1"; shift
+
+    # derive session name from current dir
+    local session="${PWD##*/}"
+
+    # if user passed -s or --session-name anywhere, just forward
+    for arg in "$@"; do
+      if [[ "$arg" == "-s" || "$arg" == "--session-name" ]]; then
+        command tmux "$subcmd" "$@"
+        return
+      fi
+    done
+
+    # otherwise attach or create
+    if command tmux has-session -t "$session" 2>/dev/null; then
+      command tmux attach-session -t "$session"
+    else
+      command tmux new-session -s "$session" "$@"
+    fi
+  else
+    # any other tmux command → passthrough
+    command tmux "$@"
+  fi
+}
+
