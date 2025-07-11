@@ -422,6 +422,10 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      diff_opts = {
+        internal = true,
+        linematch = 1,
+      },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
