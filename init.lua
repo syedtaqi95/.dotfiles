@@ -287,6 +287,40 @@ require('lazy').setup({
     },
   },
 
+  -- Use non-LSP formatters like prettier in neovim
+  {
+    "stevearc/conform.nvim",
+    ---@module "conform"
+    ---@type conform.setupOpts
+    opts = {
+      formatters_by_ft = {
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        html = { "prettier" },
+        css = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        markdown = { "prettier" },
+        mdx = { "prettier" },
+        graphql = { "prettier" },
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
+    },
+    keys = {
+      {
+        "<leader>ff",
+        function()
+          require("conform").format({ async = true })
+        end,
+        desc = "[F]ormat [F]ile"
+      }
+    }
+  },
+
   -- [[ LSP Plugins ]]
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -357,7 +391,6 @@ require('lazy').setup({
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
           map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-          map('<leader>ff', vim.lsp.buf.format, '[F]ormat [F]ile', 'n')
 
           -- See `:help K` for this keymap
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
