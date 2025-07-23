@@ -1055,7 +1055,7 @@ vim.keymap.set('n', '<leader>gl', function()
   { desc = '[G]it [L]ine History' })
 vim.keymap.set('n', '<leader>sff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sfh', function()
-    require 'telescope.builtin'.find_files({ hidden = true })
+    require 'telescope.builtin'.find_files({ hidden = true, no_ignore = true })
   end,
   { desc = '[S]earch [F]iles [H]idden' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
