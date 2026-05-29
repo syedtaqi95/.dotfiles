@@ -252,3 +252,6 @@ tmux() {
 if command -v codex >/dev/null 2>&1; then
     eval "$(codex completion bash)"
 fi
+
+# opencode
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
