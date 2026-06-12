@@ -352,6 +352,11 @@ require('lazy').setup({
     },
   },
 
+  {
+    'saghen/blink.cmp',
+    version = '1.*',
+  },
+
   -- Main LSP Configuration
   {
     'neovim/nvim-lspconfig',
