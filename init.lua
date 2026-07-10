@@ -1067,7 +1067,8 @@ vim.keymap.set('n', '<leader>gh', function()
   vim.cmd('Flog -path=' .. vim.fn.fnameescape(vim.fn.expand('%')))
 end, { desc = '[G]it File [H]istory' })
 vim.keymap.set('n', '<leader>gl', function()
-    vim.cmd('G log -L' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ':' .. '%')
+    vim.cmd('Flog -limit=' .. vim.fn.line('.') .. ',' .. vim.fn.line('.') .. ':'
+      .. vim.fn.fnameescape(vim.fn.expand('%')))
   end,
   { desc = '[G]it [L]ine History' })
 vim.keymap.set('n', '<leader>sff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
