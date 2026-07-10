@@ -794,6 +794,17 @@ require('lazy').setup({
               preview_height = 0.4,
             },
           },
+          buffers = {
+            mappings = {
+              i = {
+                ["<C-d>"] = telescope_actions.delete_buffer,
+              },
+              n = {
+                ["<C-d>"] = telescope_actions.delete_buffer,
+                ["dd"] = telescope_actions.delete_buffer,
+              },
+            },
+          },
         },
         extensions = {
           live_grep_args = {
