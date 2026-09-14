@@ -14,3 +14,7 @@ lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold b
 
 [core]
 	editor = nvim
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
