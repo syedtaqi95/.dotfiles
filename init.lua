@@ -888,12 +888,28 @@ require("lazy").setup({
 				"bash",
 				"graphql",
 				"markdown",
+				"make",
 				"diff",
 				"git_config",
 				"git_rebase",
 				"gitattributes",
 				"gitcommit",
 				"gitignore",
+				-- Companion / config parsers (markdown_inline is required by
+				-- markdown; jsonc reuses json, mdx reuses markdown via
+				-- vim.treesitter.language.register below)
+				"markdown_inline",
+				"json",
+				"yaml",
+				"toml",
+				"html",
+				"css",
+				"scss",
+				"dockerfile",
+				"just",
+				"astro",
+				"regex",
+				"comment",
 			}
 
 			require("nvim-treesitter").setup({})
