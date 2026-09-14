@@ -888,6 +888,12 @@ require("lazy").setup({
 				"bash",
 				"graphql",
 				"markdown",
+				"diff",
+				"git_config",
+				"git_rebase",
+				"gitattributes",
+				"gitcommit",
+				"gitignore",
 			}
 
 			require("nvim-treesitter").setup({})
