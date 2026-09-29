@@ -388,7 +388,10 @@ require("lazy").setup({
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 					map("gr", function()
-						require("telescope.builtin").lsp_references({ show_line = false })
+						require("telescope.builtin").lsp_references({
+							include_current_line = true,
+							show_line = false,
+						})
 					end, "[G]oto [R]eferences")
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
